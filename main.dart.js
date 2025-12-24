@@ -40200,7 +40200,7 @@ O(a1){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=this,c=null,b=A.bM(a1,c,t.w).w.a.a<800
 d.a.toString
 s=b?B.aM:B.aL
 r=b?0:5
-q=A.cI("LET'S BUILD\nTOGETHER",c,c,c,c,A.cY(c,c,B.k,c,c,c,c,c,c,c,c,b?12:42,c,c,B.bq,c,1,!0,c,c,c,c,c,c,c,c),c,c)
+q=A.cI("LET'S BUILD\nTOGETHER",c,c,c,c,A.cY(c,c,B.k,c,c,c,c,c,c,c,c,b?20:42,c,c,B.bq,c,1,!0,c,c,c,c,c,c,c,c),c,c)
 p=d.CA(B.DO,"Resume","https://docs.google.com/document/d/1BC7LYBYpZBtUcltVh_7GHjNlum79oGQwmegKX-zShxk/edit?usp=sharing")
 o=d.CA(B.DM,"LinkedIn","https://www.linkedin.com/in/adway-aghor-11060a292")
 n=d.CA(B.DN,"GitHub","https://github.com/adwayaghor")
