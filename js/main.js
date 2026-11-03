@@ -5,11 +5,10 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   /* ------------------------------------------------------------------
-   * Line-number gutter: one number per visual line of every .l element,
-   * continuing across sections, like a numbered legal document.
+   * Line markers: a dash in the margin for every visual line of every
+   * .l element, per column. Side-by-side lines share one dash.
    * ------------------------------------------------------------------ */
   function buildGutters() {
-    let n = 0;
     const lh = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lh')) || 28;
     $$('.col').forEach(col => {
       let g = col.querySelector(':scope > .gutter');
@@ -17,17 +16,18 @@
       const top0 = col.getBoundingClientRect().top;
       const frag = document.createDocumentFragment(), seen = new Set();
       $$('.l', col).forEach(el => {
-        if (el.offsetParent === null) return;           // hidden (collapsed record)
-        if (el.parentElement.closest('.l')) return;      // nested
+        if (el.offsetParent === null) return;          // hidden (collapsed record)
+        if (el.parentElement.closest('.l, .noguide')) return;
+        if (el.closest('.col') !== col) return;          // belongs to a nested column
         const r = el.getBoundingClientRect();
         const lines = Math.max(1, Math.round(r.height / lh));
         for (let i = 0; i < lines; i++) {
           const top = Math.round(r.top - top0 + i * lh);
-          if (seen.has(top)) continue;            // side-by-side lines share a number
+          if (seen.has(top)) continue;
           seen.add(top);
           const t = document.createElement('i');
-          t.textContent = ++n;
-          t.style.top = (r.top - top0 + i * lh) + 'px';
+          t.textContent = '-';
+          t.style.top = top + 'px';
           frag.appendChild(t);
         }
       });
@@ -36,6 +36,7 @@
   }
   window.rebuildGutters = buildGutters;
   let gt; const queueGutters = () => { clearTimeout(gt); gt = setTimeout(buildGutters, 60); };
+  window.queueGutters = queueGutters;
   window.addEventListener('resize', queueGutters);
   document.fonts && document.fonts.ready.then(buildGutters);
 
@@ -47,63 +48,56 @@
     });
   });
 
-  /* ------------------------------------------------------------------ Dot-matrix map */
-  const PLACES = [
-    { name: 'PUNE', lat: 18.52, lon: 73.86, note: 'BASE' },
-    { name: 'NASHIK', lat: 20.0, lon: 73.79, note: 'CYBER POLICE', dy: -1 },
-    { name: 'SINGAPORE', lat: 1.35, lon: 103.82, note: 'NUS' },
-  ];
-  function drawMap(t) {
-    const cv = $('#map'); if (!cv || !window.WORLD_MAP) return;
-    const rows = window.WORLD_MAP.slice(0, 54), H = rows.length, W = rows[0].length;
-    const cw = cv.clientWidth, step = cw / W, ch = Math.round(H * step);
-    const dpr = window.devicePixelRatio || 1;
-    if (cv.width !== Math.round(cw * dpr)) { cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr); cv.style.height = ch + 'px'; }
-    const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, cw, ch);
-    const r = Math.max(0.7, step * 0.2);
-    const toXY = (lat, lon) => [((lon + 170) / 340) * (W - 1) * step + step / 2, ((78 - lat) / 134) * 59 * step + step / 2];
-    const pts = PLACES.map(p => toXY(p.lat, p.lon));
-    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
-      if (rows[j][i] !== '1') continue;
-      const x = i * step + step / 2, y = j * step + step / 2;
-      // a slow wave radiating from Pune
-      const d = Math.hypot(x - pts[0][0], y - pts[0][1]) / step;
-      const wave = Math.max(0, Math.cos((d - t / 90) / 3)) ** 12;
-      g.fillStyle = `rgba(17,17,17,${0.16 + wave * 0.45})`;
-      g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
-    }
-    // arc Pune -> Singapore
-    const [a, b] = [pts[0], pts[2]];
-    g.strokeStyle = '#111'; g.lineWidth = 1; g.setLineDash([3, 3]);
-    g.beginPath(); g.moveTo(a[0], a[1]);
-    g.quadraticCurveTo((a[0] + b[0]) / 2, Math.min(a[1], b[1]) - 10 * step, b[0], b[1]); g.stroke(); g.setLineDash([]);
-    g.font = `500 ${Math.max(9, step * 1.6)}px "IBM Plex Mono", monospace`;
-    PLACES.forEach((p, k) => {
-      const [x, y] = pts[k];
-      const pulse = (t / 1400 + k * 0.3) % 1;
-      g.strokeStyle = `rgba(17,17,17,${1 - pulse})`;
-      g.beginPath(); g.arc(x, y, 3 + pulse * step * 3, 0, 7); g.stroke();
-      g.fillStyle = '#111'; g.fillRect(x - 3, y - 3, 6, 6);
-      if (k === 1) return;
-      const label = p.name + (k === 0 ? ' / NASHIK' : '') + '  ' + (k === 0 ? 'BASE' : p.note);
-      const tw = g.measureText(label).width;
-      let lx = k === 0 ? x - tw - 14 : x + 12;
-      if (lx + tw + 6 > cw) lx = x - tw - 14;
-      if (lx < 5) lx = 5;
-      const ly = y + (k === 0 ? -8 : 14);
-      g.fillStyle = '#111'; g.fillRect(lx - 5, ly - 11, tw + 10, 16);
-      g.fillStyle = '#fff'; g.fillText(label, lx, ly + 1);
-    });
+  /* ------------------------------------------------------------------ Top bar: clock + active section */
+  const clock = $('#clock');
+  const tick = () => {
+    const t = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour12: false });
+    clock.textContent = `Pune ${t} IST`;
+  };
+  tick(); setInterval(tick, 1000);
+  const navLinks = $$('.tb-nav a');
+  const sections = navLinks.map(a => $(a.getAttribute('href'))).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    const seenNow = new Map();
+    const nio = new IntersectionObserver(es => {
+      es.forEach(e => seenNow.set(e.target.id, e.isIntersecting ? e.intersectionRatio : 0));
+      let best = null, bv = 0;
+      seenNow.forEach((v, k) => { if (v > bv) { bv = v; best = k; } });
+      navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + best));
+    }, { threshold: [0, .15, .3, .5], rootMargin: '-44px 0px -35% 0px' });
+    sections.forEach(s => nio.observe(s));
   }
-  let mapVisible = true;
-  const mapEl = $('#map');
-  if (mapEl && 'IntersectionObserver' in window) new IntersectionObserver(e => { mapVisible = e[0].isIntersecting; }).observe(mapEl);
-  (function loop(t) { if (mapVisible) drawMap(t); requestAnimationFrame(loop); })(0);
+
+  /* ------------------------------------------------------------------ Contents board: live values + tape */
+  $('#bd-date').textContent = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const live = window.__live = window.__live || {};
+  function refreshBoard() {
+    if (live.hands != null) $('#bd-hands').textContent = live.hands.toLocaleString('en-US');
+    if (live.fx) $('#bd-fx').textContent = live.fx;
+    if (live.rag) $('#bd-rag').textContent = live.rag;
+    const items = [
+      `Arena: ${(live.hands || 0).toLocaleString('en-US')} hands dealt${live.leader ? ', leader ' + live.leader : ''}`,
+      live.fxLong ? `FX: ${live.fxLong}` : 'FX: Garman-Kohlhagen vs Monte Carlo',
+      live.ragLong ? `Router: ${live.ragLong}` : 'Router: naive / tree / graph / SQL / temporal',
+      'Open to new-grad roles',
+    ];
+    const tape = $('#tape'), txt = items.join('   ◆   ') + '   ◆   ';
+    if (tape.dataset.t !== txt && !tape.dataset.lock) { tape.textContent = txt; tape.dataset.t = txt; }
+  }
+  // the tape restarts its animation when text changes, so only refresh it once per loop
+  $('#tape').addEventListener('animationiteration', () => { delete $('#tape').dataset.lock; refreshBoard(); $('#tape').dataset.lock = 1; });
+  refreshBoard(); $('#tape').dataset.lock = 1;
+  setInterval(() => {
+    if (live.hands != null) $('#bd-hands').textContent = live.hands.toLocaleString('en-US');
+    if (live.fx) $('#bd-fx').textContent = live.fx;
+    if (live.rag) $('#bd-rag').textContent = live.rag;
+  }, 500);
 
   /* ------------------------------------------------------------------ Works index */
   const WORKS = [
     ['Poker Bot', 'Game AI', '2026', 'In development', 'A no-limit hold\'em bot. Exhibit A is its test harness: a from-scratch engine, 7-card evaluator and opponent field.', 'C++, JavaScript, Monte Carlo equity', '#arena', ''],
     ['FX Options Pricer', 'Quant', '2026', 'Built at FinIQ', 'Prices FX options by Monte Carlo and checks them against the Garman-Kohlhagen closed form; also Black-Scholes and stochastic volatility. Multithreaded in C++. A browser port runs in Exhibit B.', 'C++, std::thread, Monte Carlo', '#fx', ''],
+    ['Multi-RAG Router', 'Agentic AI', '2026', 'Team project', 'Five retrieval strategies behind one interface: naive vector RAG, tree RAG over a page index, Microsoft GraphRAG, SQL + RAG (our own design) and a temporal knowledge-graph RAG. A query router picks the right one per prompt. A live demo runs in Exhibit C.', 'Python, LLMs, GraphRAG, SQL, knowledge graphs', '#rag', ''],
     ['Firearm Detection', 'Computer vision', '2025', 'Shipped', 'CCTV-based weapon detection with Faster R-CNN, built during an academic internship at NUS, Singapore. Preprocessing, training, evaluation and inference pipeline.', 'PyTorch, Faster R-CNN', 'https://github.com/adwayaghor/cctv_weapon_detection', ''],
     ['ReliefLink', 'Mobile', '2025', '4th, national', 'Disaster management and relief app connecting citizens and NGOs: verified donations through secure payment gateways and real-time crisis information. 4th place at the AlphaByte national hackathon (GDGC PCCOE).', 'Flutter, Firebase', 'https://github.com/adwayaghor/relieflink', ''],
     ['CESA Anantya App', 'Mobile', '2025', 'Production', 'College event app: registration, marketing, ticket generation and administration, run for a live event.', 'Flutter, Firebase', '', ''],
@@ -112,7 +106,7 @@
     ['Club Management Suite', 'Product', '2024', 'Shipped', 'Club showcase, event coordination tools and dashboards for student organizations.', 'Flutter', 'https://drive.google.com/file/d/1pC9yAHw-9_SphNj0f2ash1Ad7XuQbi0s/view?usp=drive_link', ''],
     ['Intent Chatbot', 'NLP', '2024', 'Shipped', 'Intent-classification chatbot with a bag-of-words model served over Flask.', 'Python, Flask, NLTK', 'https://github.com/adwayaghor/flask-chatbot', ''],
   ];
-  const works = $('#works');
+  const works = $('#works-list');
   if (works) {
     works.innerHTML = '<div class="w hd"><span>No.</span><span>Title</span><span>Domain</span><span>Year</span></div>' +
       WORKS.map((w, i) => `<div class="w" data-i="${i}" tabindex="0"><span class="n">${String(i + 1).padStart(2, '0')}</span><span>${w[0]}</span><span>${w[1]}</span><span>${w[2]}</span></div>`).join('');
@@ -168,11 +162,11 @@
 
   /* ------------------------------------------------------------------
    * Typed reveal: each line types itself in as it scrolls into view,
-   * staggered top to bottom. Visuals (map, tables, trace) fade in.
+   * staggered top to bottom. Visual blocks fade in.
    * ------------------------------------------------------------------ */
   if (document.documentElement.classList.contains('anim') && 'IntersectionObserver' in window) {
     const lines = $$('.l, .works .w').filter(el => !el.parentElement.closest('.l'));
-    const fades = $$('.map-wrap, .table-wrap, .trace, .grid');
+    const fades = $$('.board, .table-wrap, .grid, .fx-canvas, .rag-canvas');
     lines.forEach(el => el.classList.add('rv'));
     fades.forEach(el => el.classList.add('rv-fade'));
     let batch = [], flush = null;
@@ -180,13 +174,13 @@
       entries.forEach(e => { if (e.isIntersecting) { batch.push(e.target); io.unobserve(e.target); } });
       clearTimeout(flush);
       flush = setTimeout(() => {
-        batch.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+        batch.sort((a, b) => { const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(); return ra.top - rb.top || ra.left - rb.left; });
         batch.forEach((el, i) => {
           if (el.classList.contains('rv-fade')) { setTimeout(() => el.classList.add('in'), i * 40); return; }
           const len = Math.max(4, Math.min(70, (el.textContent || '').trim().length));
           el.style.setProperty('--st', len);
           el.style.setProperty('--dur', (0.12 + len * 0.009).toFixed(2) + 's');
-          el.style.setProperty('--dl', Math.min(i * 0.055, 1.6).toFixed(2) + 's');
+          el.style.setProperty('--dl', Math.min(i * 0.045, 1.4).toFixed(2) + 's');
           el.classList.add('in');
           el.addEventListener('animationend', () => { el.classList.toggle('rv', false); el.classList.toggle('in', false); }, { once: true });
         });

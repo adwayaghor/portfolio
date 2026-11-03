@@ -129,6 +129,9 @@
     $('#r-err').textContent = `${err.toExponential(2)}  (${(err / Math.max(ref.price, 1e-12) * 100).toFixed(3)}%, ${inCI ? 'inside' : 'outside'} 95% CI)`;
     $('#r-tp').textContent = `${(r.paths / el / 1e6).toFixed(1)}M paths/sec, ${Math.round(el * 1000)} ms wall`;
     status(`Done. ${fmtN(r.paths)} paths.`);
+    const live = window.__live = window.__live || {};
+    live.fx = `${pairSel.value} ${params.call ? 'call' : 'put'} ${r.price.toFixed(dp())}`;
+    live.fxLong = `${pairSel.value} ${params.call ? 'call' : 'put'}, MC ${r.price.toFixed(dp())} vs GK ${ref.price.toFixed(dp())} over ${fmtN(r.paths)} paths`;
     draw(); drawConv();
   }
 
@@ -137,7 +140,7 @@
     const W = innerWidth < 720 ? 14 : 30;
     $('#fx-workers').innerHTML = ws.map((w, i) => {
       const f = w.total ? w.pairs / w.total : 0, k = Math.round(f * W);
-      return `<div class="l row fx-w${w.done ? ' done' : ''}"><span>W${i + 1} <span class="bar">${'█'.repeat(k)}<span class="dim">${'░'.repeat(W - k)}</span></span></span>` +
+      return `<div class="l row fx-w${w.done ? ' done' : ''}"><span>W${i + 1} <span class="bar"><b>${'█'.repeat(k)}</b>${'░'.repeat(W - k)}</span></span>` +
         `<span>${fmtN(w.pairs * 2)} paths &nbsp;${Math.round(w.ms)} ms</span></div>`;
     }).join('');
   }
@@ -183,14 +186,14 @@
     [yLo, params.S, yHi].forEach(s => g.fillText(s.toFixed(params.S >= 10 ? 2 : 4), 0, Y(s)));
     g.fillText('t = 0', 56, h - 5); g.fillText(`T = ${params.T}y`, 56 + pw - 50, h - 5);
     // strike
-    g.strokeStyle = '#b15d00'; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(56, Y(params.K)); g.lineTo(56 + pw + histW, Y(params.K)); g.stroke(); g.setLineDash([]);
-    g.fillStyle = '#ffb35c'; g.fillText('K ' + params.K, 56 + pw + 4, Y(params.K) - 8);
+    g.strokeStyle = '#ff8a70'; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(56, Y(params.K)); g.lineTo(56 + pw + histW, Y(params.K)); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#ff8a70'; g.fillText('K ' + params.K, 56 + pw + 4, Y(params.K) - 8);
     // paths, drawn progressively
     const prog = Math.min(1, (performance.now() - drawStart) / 900);
     paths.forEach(a => {
       const n = Math.max(1, Math.floor((a.length - 1) * prog)), end = a[a.length - 1];
       const itm = params.call ? end > params.K : end < params.K;
-      g.strokeStyle = itm ? 'rgba(255,179,92,.55)' : 'rgba(236,236,236,.22)'; g.lineWidth = 1;
+      g.strokeStyle = itm ? 'rgba(108,182,255,.6)' : 'rgba(236,236,236,.22)'; g.lineWidth = 1;
       g.beginPath();
       for (let t = 0; t <= n; t++) { const x = 56 + (t / (a.length - 1)) * pw, y = Y(Math.min(yHi, Math.max(yLo, a[t]))); t ? g.lineTo(x, y) : g.moveTo(x, y); }
       g.stroke();
@@ -205,7 +208,7 @@
         const y0 = Y(Math.exp(histRange[0] + (k + 1) / B * (histRange[1] - histRange[0])));
         const y1 = Y(Math.exp(histRange[0] + k / B * (histRange[1] - histRange[0])));
         const itm = params.call ? sMid > params.K : sMid < params.K;
-        g.fillStyle = itm ? '#ffb35c' : '#cfcfcf';
+        g.fillStyle = itm ? '#6cb6ff' : '#cfcfcf';
         g.fillRect(56 + pw + 2, y0, (hist[k] / mx) * (histW - 6), Math.max(1, y1 - y0 - 1));
       }
     }
@@ -224,8 +227,8 @@
     g.fillStyle = '#7d7d7d';
     g.fillText(yHi.toFixed(dp()), 0, Y(yHi)); g.fillText(yLo.toFixed(dp()), 0, Y(yLo));
     for (let e = Math.ceil(x0); e <= x1; e++) { const x = X(10 ** e); g.fillText('1e' + e, x - 8, h - 5); g.fillStyle = '#222'; g.fillRect(x, T, 1, Bm - T); g.fillStyle = '#7d7d7d'; }
-    g.strokeStyle = '#b15d00'; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(L, Y(ref.price)); g.lineTo(R, Y(ref.price)); g.stroke(); g.setLineDash([]);
-    g.fillStyle = '#ffb35c'; g.fillText('GK ' + ref.price.toFixed(dp()), R - 110, Y(ref.price) - 9);
+    g.strokeStyle = '#ff8a70'; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(L, Y(ref.price)); g.lineTo(R, Y(ref.price)); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#ff8a70'; g.fillText('GK ' + ref.price.toFixed(dp()), R - 110, Y(ref.price) - 9);
     const pts = conv.filter(c => c.paths >= 1e4);
     if (pts.length > 1) {
       g.fillStyle = 'rgba(236,236,236,.12)'; g.beginPath();
@@ -238,6 +241,11 @@
     }
   }
 
+  (function seedBoard() {
+    const p = readParams(); if (!p) return;
+    const live = window.__live = window.__live || {};
+    live.fx = `${pairSel.value} call ${gk(p).price.toFixed(p.S >= 10 ? 4 : 6)}`;
+  })();
   $('#fx-run').addEventListener('click', run);
   $('#fx-N').addEventListener('change', stale);
   thSel.addEventListener('change', stale);

@@ -355,9 +355,16 @@
 
   /* run only while the arena is on screen */
   let visible = false;
-  new IntersectionObserver(e => { visible = e[0].isIntersecting; }, { rootMargin: '200px' }).observe($('#exhibits'));
-  setInterval(() => { if (visible && !document.hidden) background(); }, 40);
-  setInterval(() => { if (visible) renderStats(); }, 500);
+  new IntersectionObserver(e => { visible = e[0].isIntersecting; }, { rootMargin: '200px' }).observe($('#arena'));
+  // full speed while the arena is on screen, a slow trickle otherwise (keeps the contents board live)
+  let slow = 0;
+  setInterval(() => { if (document.hidden) return; if (visible || ++slow % 6 === 0) background(); }, 40);
+  const live = window.__live = window.__live || {};
+  setInterval(() => {
+    live.hands = stats.hands;
+    const lead = stats.net.indexOf(Math.max(...stats.net)); live.leader = BOTS[lead].id;
+    if (visible) renderStats();
+  }, 500);
   (function gl() { if (visible) drawGrid(); setTimeout(() => requestAnimationFrame(gl), 90); })();
 
   // seed the standings so the leaderboard is meaningful on arrival

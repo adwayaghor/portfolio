@@ -13,249 +13,313 @@
 <script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("anim")</script>
 </head>
 <body>
+
+<!-- ============================ TOP BAR ============================ -->
+<header class="topbar">
+  <a href="#top" class="tb-name">A.&nbsp;Aghor</a>
+  <nav class="tb-nav">
+    <a href="#arena" data-acc="amber"><i></i>A&nbsp;Arena</a>
+    <a href="#fx" data-acc="blue"><i></i>B&nbsp;FX&nbsp;Pricer</a>
+    <a href="#rag" data-acc="violet"><i></i>C&nbsp;Multi-RAG</a>
+    <a href="#works">Works</a>
+    <a href="#record">Record</a>
+    <a href="#correspond">Contact</a>
+  </nav>
+  <span class="tb-clock" id="clock">Pune --:--:-- IST</span>
+</header>
+
 <main class="doc">
 
-<!-- ============================ WHITE: WELCOME ============================ -->
-<section class="paper light" id="top">
-  <div class="col">
-    <div class="l"></div>
-    <div class="l"><span class="chip">Welcome to my corner of the internet</span></div>
-    <div class="l"></div>
-    <div class="l l-tall"><h1 class="wordmark">ADWAY AGHOR<span class="cursor"></span></h1></div>
-    <div class="l"></div>
-    <div class="l affil">
-      <span class="aff aff-d">FinIQ</span>
-      <span class="aff aff-a">PCCOE</span>
-      <span class="aff aff-b">NUS</span>
-      <span class="aff aff-c">CYBER&nbsp;POLICE&nbsp;<i>/</i>&nbsp;NASHIK</span>
+<!-- ============================ WELCOME ============================ -->
+<section class="paper light hero" id="top">
+  <div class="sheet cols hero-cols">
+    <div class="col">
+      <div class="l"></div>
+      <div class="l"><span class="chip">Welcome to my corner of the internet</span></div>
+      <div class="l"></div>
+      <div class="l l-tall"><h1 class="wordmark">ADWAY<br>AGHOR<span class="cursor"></span></h1></div>
+      <div class="l"></div>
+      <div class="l affil">
+        <span class="aff aff-d">FinIQ</span>
+        <span class="aff aff-a">PCCOE</span>
+        <span class="aff aff-b">NUS</span>
+        <span class="aff aff-c">CYBER&nbsp;POLICE&nbsp;<i>/</i>&nbsp;NASHIK</span>
+      </div>
+      <div class="l"></div>
+      <div class="l wrap">I'm a computer engineer who likes hard, measurable problems: <span class="hl hl-blue">pricing FX options</span>, <span class="hl hl-amber">building bots that play poker</span>, <span class="hl hl-violet">routing questions to the right retriever</span>, <span class="hl hl-coral">taking apart Android malware</span>. Most of what I build sits where speed and correctness both matter.</div>
+      <div class="l"></div>
+      <div class="l wrap">B.Tech, Computer Engineering, PCCOE, 2023&ndash;2027. Open to new-grad roles.</div>
+      <div class="l"></div>
+      <div class="l"><a class="chip chip-btn" href="#exhibits">See the exhibits&nbsp;&darr;</a>&nbsp;&nbsp;<a class="ul" href="#correspond">Get in touch</a></div>
+      <div class="l"></div>
     </div>
-    <div class="l"></div>
-    <div class="l wrap">I'm a computer engineer who likes hard, measurable problems: pricing FX options, building bots that play poker, taking apart Android malware, teaching models to see. Most of what I build sits where speed and correctness both matter.</div>
-    <div class="l"></div>
-    <div class="l wrap">B.Tech, Computer Engineering, PCCOE, 2023&ndash;2027. Open to new-grad roles.</div>
-    <div class="l"></div>
-    <div class="l rule"></div>
-    <div class="l"></div>
-    <div class="l"><a class="chip chip-btn" href="#exhibits">See the exhibits&nbsp;&darr;</a>&nbsp;&nbsp;<a class="ul" href="#correspond">Get in touch</a></div>
-    <div class="l"></div>
-  </div>
-  <div class="map-wrap">
-    <canvas id="map" aria-label="Dot-matrix world map marking Pune and Singapore"></canvas>
+
+    <div class="col board-col">
+      <div class="board noguide">
+        <div class="bd-head"><span>Contents</span><span class="dim" id="bd-date"></span></div>
+        <a class="bd-row" href="#arena" data-acc="amber">
+          <span class="bd-k">A</span><span class="bd-t">The Arena</span>
+          <span class="bd-v"><b id="bd-hands">0</b> hands dealt</span>
+          <span class="bd-d">Six poker bots, live in your browser</span>
+        </a>
+        <a class="bd-row" href="#fx" data-acc="blue">
+          <span class="bd-k">B</span><span class="bd-t">FX Options Pricer</span>
+          <span class="bd-v" id="bd-fx">&mdash;</span>
+          <span class="bd-d">Multithreaded Monte Carlo vs Garman-Kohlhagen</span>
+        </a>
+        <a class="bd-row" href="#rag" data-acc="violet">
+          <span class="bd-k">C</span><span class="bd-t">Multi-RAG Router</span>
+          <span class="bd-v" id="bd-rag">5 retrievers</span>
+          <span class="bd-d">Naive, tree, graph, SQL and temporal RAG behind one router</span>
+        </a>
+        <a class="bd-row bd-sm" href="#works"><span class="bd-k">&ndash;</span><span class="bd-t">Index of works</span><span class="bd-v">10 entries</span></a>
+        <a class="bd-row bd-sm" href="#record"><span class="bd-k">&ndash;</span><span class="bd-t">Record</span><span class="bd-v">2025&ndash;2026</span></a>
+        <a class="bd-row bd-sm" href="#correspond"><span class="bd-k">&ndash;</span><span class="bd-t">Contact</span><span class="bd-v">&rarr;</span></a>
+        <div class="bd-tape" aria-hidden="true"><span id="tape"></span></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ============================ DARK: EXHIBITS ============================ -->
+<!-- ============================ EXHIBITS ============================ -->
 <section class="paper dark" id="exhibits">
-  <div class="col">
-    <div class="l"></div>
 
-    <!-- EXHIBIT A: POKER -->
-    <div class="l center" id="arena">Exhibit A: The Arena</div>
-    <div class="l row"><span>Six bots, no-limit hold'em</span><span>Live in your browser</span></div>
-    <div class="l row"><span>Hands played: <b id="hands">0</b></span><span>Hands/sec: <b id="hps">0</b></span></div>
-    <div class="l l-auto"><canvas id="grid" class="grid"></canvas></div>
-    <div class="l row"><span>96 background tables</span><span>&uarr; click one to feature it</span></div>
-    <div class="l"></div>
-    <div class="l center">Table <span id="tblno">0001</span></div>
-    <div class="l row"><span>Replay</span>
-      <span class="ctl">
-        <button data-c="restart">[|&lt;]</button>
-        <button data-c="pause" id="pausebtn">[pause]</button>
-        <button data-c="step">[&gt;]</button>
-        &nbsp;speed <button data-s="1">1x</button><button data-s="4" class="on">4x</button><button data-s="8">8x</button><button data-s="16">16x</button>
-      </span>
+  <!-- ---------------- EXHIBIT A: POKER ---------------- -->
+  <article class="exhibit sheet" id="arena" data-acc="amber">
+    <div class="col span">
+      <div class="l ex-head"><span class="chip chip-amber">Exhibit A</span><span class="ex-title">The Arena</span><span class="dim ex-sub">Six bots, no-limit hold'em, live in your browser</span></div>
+      <div class="l"></div>
     </div>
-    <div class="l row"><span id="handinfo">Hand 000001, blinds 50/100</span><span id="street">Preflop</span></div>
-    <div class="table-wrap">
-      <div class="felt" id="felt">
-        <svg class="rail" viewBox="0 0 800 380" preserveAspectRatio="none" aria-hidden="true">
-          <rect x="40" y="30" width="720" height="320" rx="160" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <rect x="46" y="36" width="708" height="308" rx="154" fill="none" stroke="currentColor" stroke-width="0.6" opacity=".5"/>
-        </svg>
-        <div class="board" id="board"></div>
-        <div class="pot" id="pot">Pot 0</div>
-        <div id="seats"></div>
+    <div class="cols">
+      <div class="col">
+        <div class="l row"><span>Hands played: <b id="hands">0</b></span><span>Hands/sec: <b id="hps">0</b></span></div>
+        <div class="l l-auto"><canvas id="grid" class="grid"></canvas></div>
+        <div class="l row"><span>96 background tables</span><span>&uarr; click one to feature it</span></div>
+        <div class="l"></div>
+        <div class="l row"><span>Table <span id="tblno">0001</span></span>
+          <span class="ctl">
+            <button data-c="restart">[|&lt;]</button>
+            <button data-c="pause" id="pausebtn">[pause]</button>
+            <button data-c="step">[&gt;]</button>
+            &nbsp;<button data-s="1">1x</button><button data-s="4" class="on">4x</button><button data-s="8">8x</button><button data-s="16">16x</button>
+          </span>
+        </div>
+        <div class="l row"><span id="handinfo">Hand 000001, blinds 50/100</span><span id="street">Preflop</span></div>
+        <div class="table-wrap">
+          <div class="felt" id="felt">
+            <svg class="rail" viewBox="0 0 800 380" preserveAspectRatio="none" aria-hidden="true">
+              <rect x="40" y="30" width="720" height="320" rx="160" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <rect x="46" y="36" width="708" height="308" rx="154" fill="none" stroke="currentColor" stroke-width="0.6" opacity=".5"/>
+            </svg>
+            <div class="board-cards" id="board"></div>
+            <div class="pot" id="pot">Pot 0</div>
+            <div id="seats"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="l row"><span>Action</span><span class="dim">this hand</span></div>
+        <div class="timeline" id="timeline"></div>
+        <div class="l dim nocase">b blind &nbsp;x check &nbsp;c call &nbsp;B bet &nbsp;R raise &nbsp;A all-in &nbsp;F fold &nbsp;W win</div>
+        <div class="l"></div>
+        <div class="l row head"><span>Standings</span><span>Net chips &nbsp; bb/100</span></div>
+        <div id="standings"></div>
+        <div class="l"></div>
+        <div class="l wrap dim">The engine, hand evaluator and bots are written from scratch in plain JavaScript. Seat 1 is a slot for my own poker bot, now in development; until it ships, it runs a placeholder equity-driven strategy. Background tables use a cheaper bot model so the counter reflects real hands dealt.</div>
       </div>
     </div>
-    <div class="l"></div>
-    <div class="l center">Action</div>
-    <div class="timeline" id="timeline"></div>
-    <div class="l dim nocase">b blind &nbsp;x check &nbsp;c call &nbsp;B bet &nbsp;R raise &nbsp;A all-in &nbsp;F fold &nbsp;W win</div>
-    <div class="l"></div>
-    <div class="l center">Standings</div>
-    <div class="l row head"><span>Bot / style</span><span>Net chips &nbsp; bb/100</span></div>
-    <div id="standings"></div>
-    <div class="l wrap dim">The engine, hand evaluator and bots are written from scratch in plain JavaScript. Seat 1 is a slot for my own poker bot, now in development; until it ships, it runs a placeholder equity-driven strategy. Background tables use a cheaper bot model so the counter reflects real hands dealt.</div>
-    <div class="l"></div>
-    <div class="l rule"></div>
-    <div class="l"></div>
+    <div class="col span"><div class="l"></div><div class="l rule"></div><div class="l"></div></div>
+  </article>
 
-    <!-- EXHIBIT B: FX PRICER -->
-    <div class="l center" id="fx">Exhibit B: FX Options Pricer</div>
-    <div class="l row"><span>Monte Carlo vs Garman-Kohlhagen</span><span id="fx-cores">Multithreaded</span></div>
-    <div class="l"></div>
-    <div class="fx-params">
-      <label class="l fxp"><span>Pair</span><select id="fx-pair"></select></label>
-      <label class="l fxp"><span>Type</span><select id="fx-type"><option value="call">Call</option><option value="put">Put</option></select></label>
-      <label class="l fxp"><span>Spot</span><input id="fx-S" inputmode="decimal"></label>
-      <label class="l fxp"><span>Strike</span><input id="fx-K" inputmode="decimal"></label>
-      <label class="l fxp"><span>Vol &sigma; %</span><input id="fx-v" inputmode="decimal"></label>
-      <label class="l fxp"><span>Expiry, yrs</span><input id="fx-T" inputmode="decimal"></label>
-      <label class="l fxp"><span>r dom %</span><input id="fx-rd" inputmode="decimal"></label>
-      <label class="l fxp"><span>r for %</span><input id="fx-rf" inputmode="decimal"></label>
-      <label class="l fxp"><span>Paths</span><select id="fx-N"><option value="200000">200k</option><option value="1000000">1M</option><option value="4000000" selected>4M</option><option value="16000000">16M</option></select></label>
-      <label class="l fxp"><span>Threads</span><select id="fx-th"></select></label>
+  <!-- ---------------- EXHIBIT B: FX ---------------- -->
+  <article class="exhibit sheet" id="fx" data-acc="blue">
+    <div class="col span">
+      <div class="l ex-head"><span class="chip chip-blue">Exhibit B</span><span class="ex-title">FX Options Pricer</span><span class="dim ex-sub">Monte Carlo vs Garman-Kohlhagen &middot; <span id="fx-cores">multithreaded</span></span></div>
+      <div class="l"></div>
     </div>
-    <div class="l"></div>
-    <div class="l row"><span><button class="chip chip-btn chip-inv" id="fx-run">Run simulation&nbsp;&rarr;</button></span><span id="fx-status" class="dim">Idle</span></div>
-    <div class="l"></div>
-    <div class="l row"><span>Sample paths, spot to expiry</span><span>Terminal distribution</span></div>
-    <div class="l-auto"><canvas id="fx-paths" class="fx-canvas"></canvas></div>
-    <div class="l"></div>
-    <div class="l center">Workers</div>
-    <div id="fx-workers"></div>
-    <div class="l"></div>
-    <div class="l center">Result</div>
-    <div class="fx-res">
-      <div class="l spec-row"><span>Garman-Kohlhagen</span><span id="r-gk">&mdash;</span></div>
-      <div class="l spec-row"><span>Monte Carlo</span><span id="r-mc">&mdash;</span></div>
-      <div class="l spec-row"><span>95% interval</span><span id="r-ci">&mdash;</span></div>
-      <div class="l spec-row"><span>Abs error</span><span id="r-err">&mdash;</span></div>
-      <div class="l spec-row"><span>Throughput</span><span id="r-tp">&mdash;</span></div>
-      <div class="l spec-row"><span>Greeks &Delta; &Gamma; vega</span><span id="r-greeks">&mdash;</span></div>
+    <div class="cols">
+      <div class="col">
+        <div class="fx-params">
+          <label class="l fxp"><span>Pair</span><select id="fx-pair"></select></label>
+          <label class="l fxp"><span>Type</span><select id="fx-type"><option value="call">Call</option><option value="put">Put</option></select></label>
+          <label class="l fxp"><span>Spot</span><input id="fx-S" inputmode="decimal"></label>
+          <label class="l fxp"><span>Strike</span><input id="fx-K" inputmode="decimal"></label>
+          <label class="l fxp"><span>Vol &sigma; %</span><input id="fx-v" inputmode="decimal"></label>
+          <label class="l fxp"><span>Expiry, yrs</span><input id="fx-T" inputmode="decimal"></label>
+          <label class="l fxp"><span>r dom %</span><input id="fx-rd" inputmode="decimal"></label>
+          <label class="l fxp"><span>r for %</span><input id="fx-rf" inputmode="decimal"></label>
+          <label class="l fxp"><span>Paths</span><select id="fx-N"><option value="200000">200k</option><option value="1000000">1M</option><option value="4000000" selected>4M</option><option value="16000000">16M</option></select></label>
+          <label class="l fxp"><span>Threads</span><select id="fx-th"></select></label>
+        </div>
+        <div class="l"></div>
+        <div class="l row"><span><button class="chip chip-btn chip-blue" id="fx-run">Run simulation&nbsp;&rarr;</button></span><span id="fx-status" class="dim">Idle</span></div>
+        <div class="l"></div>
+        <div class="l row"><span>Workers</span><span></span></div>
+        <div id="fx-workers"></div>
+        <div class="l"></div>
+        <div class="fx-res">
+          <div class="l spec-row"><span>Garman-Kohlhagen</span><span id="r-gk">&mdash;</span></div>
+          <div class="l spec-row"><span>Monte Carlo</span><span id="r-mc">&mdash;</span></div>
+          <div class="l spec-row"><span>95% interval</span><span id="r-ci">&mdash;</span></div>
+          <div class="l spec-row"><span>Abs error</span><span id="r-err">&mdash;</span></div>
+          <div class="l spec-row"><span>Throughput</span><span id="r-tp">&mdash;</span></div>
+          <div class="l spec-row"><span>Greeks &Delta; &Gamma; vega</span><span id="r-greeks">&mdash;</span></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="l row"><span>Sample paths, spot to expiry</span><span>Terminal distribution</span></div>
+        <div class="l-auto"><canvas id="fx-paths" class="fx-canvas"></canvas></div>
+        <div class="l"></div>
+        <div class="l row"><span>Convergence</span><span class="dim">MC estimate vs paths, log scale</span></div>
+        <div class="l-auto"><canvas id="fx-conv" class="fx-canvas fx-conv"></canvas></div>
+        <div class="l"></div>
+        <div class="l wrap dim">The real pricer is C++ with std::thread and also covers Black-Scholes and stochastic volatility. This is a JavaScript port of the Monte Carlo core: each Web Worker draws its own antithetic Gaussian stream, prices a slice of the paths, and streams partial sums back to be merged. Every number here is computed live; market inputs are illustrative.</div>
+      </div>
     </div>
-    <div class="l"></div>
-    <div class="l row"><span>Convergence</span><span class="dim">MC estimate vs paths, log scale</span></div>
-    <div class="l-auto"><canvas id="fx-conv" class="fx-canvas fx-conv"></canvas></div>
-    <div class="l"></div>
-    <div class="l wrap dim">The real pricer is C++ with std::thread and also covers Black-Scholes and stochastic volatility. This is a JavaScript port of the Monte Carlo core: each Web Worker draws its own antithetic Gaussian stream, prices a slice of the paths, and streams partial sums back to be merged. Every number on this page is computed live.</div>
-    <div class="l"></div>
-    <div class="l rule"></div>
-    <div class="l"></div>
+    <div class="col span"><div class="l"></div><div class="l rule"></div><div class="l"></div></div>
+  </article>
 
-    <!-- INDEX OF WORKS -->
-    <div class="l center">Index of Works</div>
-    <div class="l row"><span>Hover or tap to inspect</span><span></span></div>
-    <div class="l"></div>
-    <div class="works" id="works"></div>
-    <div class="l"></div>
-    <div class="readout" id="readout">
-      <div class="l row"><span id="ro-title">&mdash;</span><span id="ro-status"></span></div>
-      <div class="l wrap dim" id="ro-desc">Select an entry.</div>
-      <div class="l dim" id="ro-stack"></div>
-      <div class="l" id="ro-link"></div>
+  <!-- ---------------- EXHIBIT C: MULTI-RAG ---------------- -->
+  <article class="exhibit sheet" id="rag" data-acc="violet">
+    <div class="col span">
+      <div class="l ex-head"><span class="chip chip-violet">Exhibit C</span><span class="ex-title">Multi-RAG Router</span><span class="dim ex-sub">Five retrieval strategies, one router that picks per query</span></div>
+      <div class="l"></div>
     </div>
-    <div class="l"></div>
-    <div class="l rule"></div>
-    <div class="l"></div>
+    <div class="cols">
+      <div class="col">
+        <label class="l field-dark"><span>Query &rsaquo;</span><input id="rag-q" placeholder="Ask something, or pick a sample below" autocomplete="off"></label>
+        <div class="l row"><span><button class="chip chip-btn chip-violet" id="rag-go">Route&nbsp;&rarr;</button></span><span class="dim" id="rag-feat"></span></div>
+        <div class="l"></div>
+        <div class="l row"><span>Samples</span><span class="dim">click to route</span></div>
+        <div id="rag-samples"></div>
+        <div class="l"></div>
+        <div class="l row head"><span>Router</span><span>Score</span></div>
+        <div id="rag-scores"></div>
+        <div class="l"></div>
+        <div class="l row"><span id="rag-decision">&mdash;</span><span></span></div>
+      </div>
+      <div class="col">
+        <div class="l row"><span id="rag-vtitle">Retriever</span><span class="dim" id="rag-vsub"></span></div>
+        <div class="l-auto"><canvas id="rag-canvas" class="rag-canvas"></canvas></div>
+        <div class="l"></div>
+        <div class="l row"><span>Pipeline</span><span></span></div>
+        <div id="rag-steps"></div>
+        <div class="l"></div>
+        <div class="l wrap dim">Team project. Five retrievers share one interface: naive vector RAG; tree RAG over a page index of long documents; Microsoft's GraphRAG with community summaries; SQL + RAG, our own design that pairs text-to-SQL with retrieved context; and a temporal knowledge-graph RAG adapted from an open-source implementation. A router reads each query and sends it to the method that suits it. In the browser, a small keyword classifier stands in for the router so you can watch the routing live.</div>
+      </div>
+    </div>
+    <div class="col span"><div class="l"></div><div class="l rule"></div><div class="l"></div></div>
+  </article>
 
-    <!-- CAPABILITIES -->
-    <div class="l center">Capabilities</div>
-    <div class="l row head"><span>Domain</span><span>Instruments</span></div>
-    <div class="spec">
-      <div class="l spec-row"><span>Languages</span><span>C++, C, Dart, Python, JavaScript, TypeScript, SQL</span></div>
-      <div class="l spec-row"><span>Fintech</span><span>FIX protocol, RFQ workflows, FX &amp; derivatives pricing, structured products</span></div>
-      <div class="l spec-row"><span>Quant</span><span>Monte Carlo, Garman-Kohlhagen, Black-Scholes, stochastic volatility</span></div>
-      <div class="l spec-row"><span>Apps</span><span>Flutter (Riverpod, MVVM), React Native, WebSockets, REST</span></div>
-      <div class="l spec-row"><span>Security</span><span>Reverse engineering, cryptanalysis, vulnerability assessment, forensics</span></div>
-      <div class="l spec-row"><span>AI / ML</span><span>Computer vision, deep learning, NLP</span></div>
-      <div class="l spec-row"><span>Tools</span><span>Docker, AWS, Firebase, Node.js, Git, Burp Suite, Wireshark</span></div>
+  <!-- ---------------- WORKS + CAPABILITIES ---------------- -->
+  <article class="sheet" id="works">
+    <div class="cols">
+      <div class="col">
+        <div class="l ex-head"><span class="ex-title">Index of Works</span><span class="dim ex-sub">Hover or tap to inspect</span></div>
+        <div class="l"></div>
+        <div class="works" id="works-list"></div>
+        <div class="l"></div>
+        <div class="readout" id="readout">
+          <div class="l row"><span id="ro-title">&mdash;</span><span id="ro-status"></span></div>
+          <div class="l wrap dim" id="ro-desc">Select an entry.</div>
+          <div class="l dim" id="ro-stack"></div>
+          <div class="l" id="ro-link"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="l ex-head"><span class="ex-title">Capabilities</span><span class="dim ex-sub">Domain / instruments</span></div>
+        <div class="l"></div>
+        <div class="spec">
+          <div class="l spec-row"><span>Languages</span><span>C++, C, Dart, Python, JavaScript, TypeScript, SQL</span></div>
+          <div class="l spec-row"><span>Fintech</span><span>FIX protocol, RFQ workflows, FX &amp; derivatives pricing, structured products</span></div>
+          <div class="l spec-row"><span>Quant</span><span>Monte Carlo, Garman-Kohlhagen, Black-Scholes, stochastic volatility</span></div>
+          <div class="l spec-row"><span>AI / ML</span><span>RAG (vector, tree, graph, SQL, temporal KG), computer vision, deep learning, NLP</span></div>
+          <div class="l spec-row"><span>Apps</span><span>Flutter (Riverpod, MVVM), React Native, WebSockets, REST</span></div>
+          <div class="l spec-row"><span>Security</span><span>Reverse engineering, cryptanalysis, vulnerability assessment, forensics</span></div>
+          <div class="l spec-row"><span>Tools</span><span>Docker, AWS, Firebase, Node.js, Git, Burp Suite, Wireshark</span></div>
+        </div>
+      </div>
     </div>
-    <div class="l"></div>
-  </div>
+    <div class="col span"><div class="l"></div></div>
+  </article>
 </section>
 
-<!-- ============================ WHITE: RECORD + FORM ============================ -->
+<!-- ============================ RECORD + CONTACT ============================ -->
 <section class="paper light" id="record">
-  <div class="col">
-    <div class="l"></div>
-    <div class="l center">Record</div>
-    <div class="l row head"><span>Engagement</span><span>Date</span></div>
-    <div class="rec">
-      <div class="l row btn"><span>App Developer (Flutter): PCCOE IR Cell</span><span>Jan&ndash;May 2025</span></div>
-      <div class="rec-body">
-        <div class="l wrap dim">Event and internship registration, alumni connect, QR attendance, authentication, admin dashboards, logging, Firebase. Prepared for Play Store and App Store release.</div>
+  <div class="sheet cols">
+    <div class="col">
+      <div class="l"></div>
+      <div class="l ex-head"><span class="chip chip-green">Record</span><span class="dim ex-sub">Oldest first</span></div>
+      <div class="l"></div>
+      <div class="l row head"><span>Engagement</span><span>Date</span></div>
+      <div class="rec">
+        <div class="l row btn"><span>App Developer (Flutter): PCCOE IR Cell</span><span>Jan&ndash;May 2025</span></div>
+        <div class="rec-body"><div class="l wrap dim">Event and internship registration, alumni connect, QR attendance, authentication, admin dashboards, logging, Firebase. Prepared for Play Store and App Store release.</div></div>
       </div>
-    </div>
-    <div class="rec">
-      <div class="l row btn"><span>Academic Intern (AI/ML): NUS, Singapore</span><span>Jun 2025</span></div>
-      <div class="rec-body">
-        <div class="l wrap dim">Faster R-CNN firearm detection for CCTV analytics: dataset preprocessing, training and evaluation, in an academic research setting.</div>
+      <div class="rec">
+        <div class="l row btn"><span>Academic Intern (AI/ML): NUS, Singapore</span><span>Jun 2025</span></div>
+        <div class="rec-body"><div class="l wrap dim">Faster R-CNN firearm detection for CCTV analytics: dataset preprocessing, training and evaluation, in an academic research setting.</div></div>
       </div>
-    </div>
-    <div class="rec">
-      <div class="l row btn"><span>Research Intern (AI/ML): PCCOE AS&amp;H</span><span>Jul&ndash;Aug 2025</span></div>
-      <div class="rec-body">
-        <div class="l wrap dim">Disease prediction model. Data preprocessing and imputation, KDD, medical data mining, ML and DL baselines.</div>
+      <div class="rec">
+        <div class="l row btn"><span>Research Intern (AI/ML): PCCOE AS&amp;H</span><span>Jul&ndash;Aug 2025</span></div>
+        <div class="rec-body"><div class="l wrap dim">Disease prediction model. Data preprocessing and imputation, KDD, medical data mining, ML and DL baselines.</div></div>
       </div>
-    </div>
-    <div class="rec">
-      <div class="l row btn"><span>Cybersecurity Intern: Cyber Police, Nashik</span><span>Dec 2025</span></div>
-      <div class="rec-body">
-        <div class="l wrap dim">Static and dynamic reverse engineering of Android APKs for live cybercrime cases. Forensic imaging and evidence extraction with Cellebrite, Autopsy and MOBILedit; malware behaviour analysis; cryptanalysis to decrypt evidence.</div>
+      <div class="rec">
+        <div class="l row btn"><span>Cybersecurity Intern: Cyber Police, Nashik</span><span>Dec 2025</span></div>
+        <div class="rec-body"><div class="l wrap dim">Static and dynamic reverse engineering of Android APKs for live cybercrime cases. Forensic imaging and evidence extraction with Cellebrite, Autopsy and MOBILedit; malware behaviour analysis; cryptanalysis to decrypt evidence.</div></div>
       </div>
-    </div>
-    <div class="rec">
-      <div class="l row btn"><span>Flutter &amp; Quant Developer: FinIQ Consulting</span><span>2026</span></div>
-      <div class="rec-body">
-        <div class="l wrap dim">Flutter front end of a multi-asset trading platform over C#/.NET and Java pricing services: structured-product pricers, multi-pricers, RFQ generation. FIX messages, WebSocket feeds and HTTP APIs surfacing real-time FX and derivatives pricing. Built the FX options pricing simulator in C++ (see Exhibit B).</div>
+      <div class="rec">
+        <div class="l row btn"><span>Flutter &amp; Quant Developer: FinIQ Consulting</span><span>2026</span></div>
+        <div class="rec-body"><div class="l wrap dim">Flutter front end of a multi-asset trading platform over C#/.NET and Java pricing services: structured-product pricers, multi-pricers, RFQ generation. FIX messages, WebSocket feeds and HTTP APIs surfacing real-time FX and derivatives pricing. Built the FX options pricing simulator in C++ (see Exhibit B).</div></div>
       </div>
+      <div class="l"></div>
+      <div class="l row head"><span>Honours &amp; roles</span><span></span></div>
+      <div class="l row"><span>4th place, AlphaByte national hackathon (GDGC PCCOE)</span><span>2025</span></div>
+      <div class="l row"><span>AI &amp; Data Science Lead, Microsoft Learn Student Chapter</span><span>PCCOE</span></div>
+      <div class="l row"><span>Tech Coordinator, IR Cell</span><span>PCCOE</span></div>
+      <div class="l"></div>
     </div>
-    <div class="l"></div>
-    <div class="l row head"><span>Honours &amp; roles</span><span></span></div>
-    <div class="l row"><span>4th place, AlphaByte national hackathon (GDGC PCCOE)</span><span>2025</span></div>
-    <div class="l row"><span>AI &amp; Data Science Lead, Microsoft Learn Student Chapter</span><span>PCCOE</span></div>
-    <div class="l row"><span>Tech Coordinator, IR Cell</span><span>PCCOE</span></div>
-    <div class="l"></div>
-    <div class="l rule"></div>
-  </div>
-</section>
 
-<section class="paper light" id="correspond">
-  <div class="col">
-    <div class="l"></div>
-    <div class="l center"><span class="chip chip-amber">Get in touch</span></div>
-    <div class="l"></div>
-    <div class="l"></div>
-    <form id="form" novalidate>
-      <label class="l field"><span>Full name:</span><input name="name" required autocomplete="name"></label>
+    <div class="col" id="correspond">
       <div class="l"></div>
-      <label class="l field"><span>Email:</span><input name="email" type="email" required placeholder="name@company.com" autocomplete="email"></label>
+      <div class="l ex-head"><span class="chip chip-amber-l">Get in touch</span><span class="dim ex-sub">Form, or any link below</span></div>
       <div class="l"></div>
-      <label class="l field"><span>Organization:</span><input name="org" placeholder="optional"></label>
+      <form id="form" novalidate>
+        <label class="l field"><span>Full name:</span><input name="name" required autocomplete="name"></label>
+        <label class="l field"><span>Email:</span><input name="email" type="email" required placeholder="name@company.com" autocomplete="email"></label>
+        <label class="l field"><span>Organization:</span><input name="org" placeholder="optional"></label>
+        <label class="l field"><span>Inquiry:</span>
+          <select name="kind"><option>Full-time role</option><option>Internship</option><option>Collaboration</option><option>Other</option></select>
+        </label>
+        <div class="l"></div>
+        <label class="l field field-top"><span>Message:</span><textarea name="message" rows="4" required></textarea></label>
+        <div class="l"></div>
+        <div class="l"><button class="chip chip-btn" type="submit" id="send">Send&nbsp;&rarr;</button>&nbsp;&nbsp;<span id="formstatus" class="dim"></span></div>
+      </form>
       <div class="l"></div>
-      <label class="l field"><span>Nature of inquiry:</span>
-        <select name="kind">
-          <option>Full-time role</option><option>Internship</option><option>Collaboration</option><option>Other</option>
-        </select>
-      </label>
+      <div class="l row head"><span>Elsewhere</span><span></span></div>
+      <div class="links">
+        <a class="l ul-row" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1BC7LYBYpZBtUcltVh_7GHjNlum79oGQwmegKX-zShxk/edit?usp=sharing"><span>Resume</span><span>&nearr;</span></a>
+        <a class="l ul-row" target="_blank" rel="noopener" href="https://www.linkedin.com/in/adway-aghor-11060a292"><span>LinkedIn</span><span>&nearr;</span></a>
+        <a class="l ul-row" target="_blank" rel="noopener" href="https://github.com/adwayaghor"><span>GitHub</span><span>&nearr;</span></a>
+        <a class="l ul-row" target="_blank" rel="noopener" href="https://leetcode.com/u/adwayaghor/"><span>LeetCode</span><span>&nearr;</span></a>
+        <a class="l ul-row" target="_blank" rel="noopener" href="https://play.picoctf.org/users/AdwayAghor"><span>picoCTF</span><span>&nearr;</span></a>
+        <a class="l ul-row" href="mailto:aghoradway@gmail.com"><span class="nocase">aghoradway@gmail.com</span><span>&rarr;</span></a>
+      </div>
       <div class="l"></div>
-      <label class="l field field-top"><span>Message:</span><textarea name="message" rows="4" required></textarea></label>
-      <div class="l"></div>
-      <div class="l"></div>
-      <div class="l"><button class="chip chip-btn" type="submit" id="send">Send&nbsp;&rarr;</button>&nbsp;&nbsp;<span id="formstatus" class="dim"></span></div>
-    </form>
-    <div class="l"></div>
-    <div class="l rule"></div>
-    <div class="l"></div>
-    <div class="l row"><span>Elsewhere</span><span></span></div>
-    <div class="l"><a class="ul" target="_blank" rel="noopener" href="https://docs.google.com/document/d/1BC7LYBYpZBtUcltVh_7GHjNlum79oGQwmegKX-zShxk/edit?usp=sharing">I. Resume &nearr;</a></div>
-    <div class="l"><a class="ul" target="_blank" rel="noopener" href="https://www.linkedin.com/in/adway-aghor-11060a292">II. LinkedIn &nearr;</a></div>
-    <div class="l"><a class="ul" target="_blank" rel="noopener" href="https://github.com/adwayaghor">III. GitHub &nearr;</a></div>
-    <div class="l"><a class="ul" target="_blank" rel="noopener" href="https://leetcode.com/u/adwayaghor/">IV. LeetCode &nearr;</a></div>
-    <div class="l"><a class="ul" target="_blank" rel="noopener" href="https://play.picoctf.org/users/AdwayAghor">V. picoCTF &nearr;</a></div>
-    <div class="l"><a class="ul nocase" href="mailto:aghoradway@gmail.com">VI. aghoradway@gmail.com</a></div>
-    <div class="l"></div>
-    <div class="l dim">Set in IBM Plex Mono. Built by hand, no frameworks. &copy; 2026 Adway Aghor.</div>
-    <div class="l"><a class="ul dim" href="#top">Return to top &uarr;</a></div>
-    <div class="l"></div>
+    </div>
   </div>
+  <div class="sheet"><div class="col span">
+    <div class="l rule"></div>
+    <div class="l row dim"><span>Set in IBM Plex Mono. Built by hand, no frameworks. &copy; 2026 Adway Aghor.</span><span><a class="ul" href="#top">Top &uarr;</a></span></div>
+    <div class="l"></div>
+  </div></div>
 </section>
 </main>
 
-<script src="js/mapdata.js"></script>
 <script src="js/main.js"></script>
 <script src="js/poker.js"></script>
 <script src="js/fx.js"></script>
+<script src="js/rag.js"></script>
 </body>
 </html>
