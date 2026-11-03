@@ -15,13 +15,16 @@
       let g = col.querySelector(':scope > .gutter');
       if (!g) { g = document.createElement('div'); g.className = 'gutter'; col.prepend(g); }
       const top0 = col.getBoundingClientRect().top;
-      const frag = document.createDocumentFragment();
+      const frag = document.createDocumentFragment(), seen = new Set();
       $$('.l', col).forEach(el => {
         if (el.offsetParent === null) return;           // hidden (collapsed record)
         if (el.parentElement.closest('.l')) return;      // nested
         const r = el.getBoundingClientRect();
         const lines = Math.max(1, Math.round(r.height / lh));
         for (let i = 0; i < lines; i++) {
+          const top = Math.round(r.top - top0 + i * lh);
+          if (seen.has(top)) continue;            // side-by-side lines share a number
+          seen.add(top);
           const t = document.createElement('i');
           t.textContent = ++n;
           t.style.top = (r.top - top0 + i * lh) + 'px';
@@ -84,7 +87,10 @@
       if (k === 1) return;
       const label = p.name + (k === 0 ? ' / NASHIK' : '') + '  ' + (k === 0 ? 'BASE' : p.note);
       const tw = g.measureText(label).width;
-      const lx = k === 0 ? x - tw - 14 : x + 12, ly = y + (k === 0 ? -8 : 14);
+      let lx = k === 0 ? x - tw - 14 : x + 12;
+      if (lx + tw + 6 > cw) lx = x - tw - 14;
+      if (lx < 5) lx = 5;
+      const ly = y + (k === 0 ? -8 : 14);
       g.fillStyle = '#111'; g.fillRect(lx - 5, ly - 11, tw + 10, 16);
       g.fillStyle = '#fff'; g.fillText(label, lx, ly + 1);
     });
@@ -96,15 +102,11 @@
 
   /* ------------------------------------------------------------------ Works index */
   const WORKS = [
-    ['SentinelAI', 'LLM security', '2026', 'In progress', 'Edge-deployed security proxy for enterprise AI chatbots. Detects and blocks prompt injection and jailbreaks, including indirect injection, before the model executes. Unified detection, filtering and policy layer; design target under 100 ms added latency.', 'Python, LLM security, edge deployment', '', 'B.Tech final-year project'],
-    ['Poker Bot', 'Game AI', '2026', 'In development', 'A no-limit hold\'em bot. The arena in Exhibit B is its test harness: a from-scratch engine, 7-card evaluator, and opponent field.', 'C++, JavaScript, Monte Carlo equity', '#arena', ''],
-    ['RouteRAG', 'Agentic AI', '2026', 'Group, G4', 'Comparative analysis of retrieval-augmented generation techniques, with an LLM-as-judge router that picks a RAG strategy per query.', 'Python, LLMs, vector search', '', 'Agentic AI course, with A. Atre and A. Bhujang'],
-    ['LiTracer', 'NLP', '2026', 'Prototype', 'Literary authorship verification. Compares a disputed text against an author\'s style using a local LLM.', 'Python, Streamlit, Ollama (Qwen3 8B)', '', ''],
-    ['Lit2Comic', 'Generative AI', '2026', 'In progress', 'AI-assisted adaptation of literary text into comic panels: scene segmentation, scripting and image generation.', 'Python, LLMs, image generation', '', 'English MDM project'],
-    ['Incident Coordination Net', 'Distributed sys', '2026', 'Mini project', 'Disaster-resilient incident coordination network that keeps nodes coordinating through partial failures.', 'Distributed systems', 'https://github.com/adwayaghor/dsminiproject', 'With G. Shende'],
+    ['Poker Bot', 'Game AI', '2026', 'In development', 'A no-limit hold\'em bot. Exhibit A is its test harness: a from-scratch engine, 7-card evaluator and opponent field.', 'C++, JavaScript, Monte Carlo equity', '#arena', ''],
+    ['FX Options Pricer', 'Quant', '2026', 'Built at FinIQ', 'Prices FX options by Monte Carlo and checks them against the Garman-Kohlhagen closed form; also Black-Scholes and stochastic volatility. Multithreaded in C++. A browser port runs in Exhibit B.', 'C++, std::thread, Monte Carlo', '#fx', ''],
     ['Firearm Detection', 'Computer vision', '2025', 'Shipped', 'CCTV-based weapon detection with Faster R-CNN, built during an academic internship at NUS, Singapore. Preprocessing, training, evaluation and inference pipeline.', 'PyTorch, Faster R-CNN', 'https://github.com/adwayaghor/cctv_weapon_detection', ''],
     ['ReliefLink', 'Mobile', '2025', '4th, national', 'Disaster management and relief app connecting citizens and NGOs: verified donations through secure payment gateways and real-time crisis information. 4th place at the AlphaByte national hackathon (GDGC PCCOE).', 'Flutter, Firebase', 'https://github.com/adwayaghor/relieflink', ''],
-    ['CESA Anantya App', 'Mobile', '2025', 'Production', 'End-to-end event app for CESA\'s Anantya: registration, attendance tracking and marketing, built and run for a live college event.', 'Flutter, Firebase', '', ''],
+    ['CESA Anantya App', 'Mobile', '2025', 'Production', 'College event app: registration, marketing, ticket generation and administration, run for a live event.', 'Flutter, Firebase', '', ''],
     ['IR Cell Platform', 'Mobile', '2025', 'Production', 'Event and internship registration, alumni connect, QR attendance, biometric and RFID support, admin dashboards. Deployed for PCCOE\'s International Relations Cell.', 'Flutter, Riverpod, Firebase', 'https://github.com/adwayaghor/ircell', ''],
     ['NFC Verification', 'Security', '2025', 'Prototype', 'Secure NFC authentication using cryptographic challenge-response.', 'NFC, cryptography', '', ''],
     ['Club Management Suite', 'Product', '2024', 'Shipped', 'Club showcase, event coordination tools and dashboards for student organizations.', 'Flutter', 'https://drive.google.com/file/d/1pC9yAHw-9_SphNj0f2ash1Ad7XuQbi0s/view?usp=drive_link', ''],
@@ -122,7 +124,7 @@
       $('#ro-desc').textContent = w[4] + (w[7] ? ` (${w[7]}.)` : '');
       $('#ro-stack').textContent = 'Stack: ' + w[5];
       $('#ro-link').innerHTML = w[6]
-        ? `<a class="ul" href="${w[6]}" ${w[6][0] === '#' ? '' : 'target="_blank" rel="noopener"'}>${w[6][0] === '#' ? 'Open in Exhibit B ↓' : 'Open source ↗'}</a>`
+        ? `<a class="ul" href="${w[6]}" ${w[6][0] === '#' ? '' : 'target="_blank" rel="noopener"'}>${w[6][0] === '#' ? 'Open the exhibit ↓' : 'Open source ↗'}</a>`
         : '<span class="dim">Source available on request</span>';
       queueGutters();
     };
